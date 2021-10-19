@@ -2,7 +2,7 @@
 
 ### Observações/Recomendações
 ### Modelo de gravação SYNC;
-### Mudar de gravação ou colocar como váriável (set);
+### Mudar de gravação ou colocar como váriável (read); read -p
 ### O valor do count esta em 100MB;
 ### Timeout pode ser ajustado também;
 ### Recomendação de crontab (*/30 * * * * sh /tmp/teste-disco-dd.sh 2>> /tmp/resultbash.log)
