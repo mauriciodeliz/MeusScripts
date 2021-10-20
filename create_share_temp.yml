@@ -1,0 +1,19 @@
+- name: Create and Shared Folder
+  hosts: all
+  gather_facts: false
+  tasks:
+
+    - name: Create TEMP Folder
+      win_file:
+        path: D:\Temp
+        state: directory
+      ignore_errors: true
+
+    - name: Share TEMP Folder
+      win_share:
+        name: Temp
+        description: Temp
+        path: D:\Temp
+        list: yes
+        full: Everyone
+      ignore_errors: true
