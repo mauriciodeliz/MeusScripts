@@ -1,4 +1,4 @@
-# MeusScripts
+# Sripts funcionais para ambientes (Windows/Linux/Automaçõe)
 Diretório para compartilhar Scripts funcionais de Sysadmin 🙂
 -
 # Sobre os Scripts
