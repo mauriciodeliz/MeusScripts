@@ -1,0 +1,26 @@
+- name: Create Shadow Copies
+  hosts: all
+  gather_facts: false
+  tasks:
+
+    - name: Set Limit for Shadow Copies
+      win_shell: "vssadmin add  shadowstorage /for=D: /on=D: /maxsize=4GB"
+      ignore_errors: true
+    
+    - name: Set Limit for Shadow Copies
+      win_shell: "vssadmin resize shadowstorage /for=D: /on=D: /maxsize=4GB"
+    - name: Create Task for Shadow
+      win_scheduled_task:
+        name: Shadow-Copies
+        description: Shadow Copies for Disk
+        actions:
+        - path: wmic
+          arguments: shadowcopy call create Volume=D:\
+        username: SYSTEM
+        run_level: highest
+        state: present
+        triggers:
+        - type: daily
+          start_boundary: '2018-12-20T18:00:00'
+          repetition:
+          - interval: PT24H
