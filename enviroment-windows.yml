@@ -1,0 +1,10 @@
+- name: Update Registry
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Update Registry
+      win_regedit:
+        path: HKLM:\SYSTEM\ControlSet001\Control\Session Manager\Environment
+        name: NAME
+        data: ['INFORMATION']
+        type: string
