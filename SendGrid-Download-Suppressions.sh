@@ -28,21 +28,22 @@ download_json(){
     fi
 }
 
-# Conversão de Json para CSV
-    converte_json_csv(){
+# Conversão de Json para TXT
+    converte_json_txt(){
         echo -e "$DATA - Iniciando conversão dos arquivos JSON -> CSV" >> $ARQUIVO_LOG
 
-        JQ_BLOCKS=$(/usr/bin/jq -r 'map({status,reason,email,created}) | (first | keys_unsorted) as $keys | map([to_entries[] | .value]) as $rows | $keys,$rows[] | @csv' "$TEMP_DIR/suppression_blocks.json" > "$TEMP_DIR/suppression_blocks.csv")
-        EC_JQ_BLOCKS=$(echo $?)
+        CAT_BLOCKS=$(cat "$TEMP_DIR/suppression_blocks.json" | tr -s ',' '\n' |tr -d "{}[]'" | grep '"email"' | tr -d "'" | cut -d':' -f2 | uniq | tr -d '"' > "$TEMP_DIR/suppression_blocks.txt")
+        EC_CAT_BLOCKS=$(echo $?)
         
-        JQ_BOUNCES=$(/usr/bin/jq -r 'map({status,reason,email,created}) | (first | keys_unsorted) as $keys | map([to_entries[] | .value]) as $rows | $keys,$rows[] | @csv' "$TEMP_DIR/suppression_bounces.json" > "$TEMP_DIR/suppression_bounces.csv")
-        EC_JQ_BOUNCES=$(echo $?)
+        
+        CAT_BOUNCES=$(cat "$TEMP_DIR/suppression_bounces.json" | tr -s ',' '\n' |tr -d "{}[]'" | grep '"email"' | tr -d "'" | cut -d':' -f2 | uniq | tr -d '"' > "$TEMP_DIR/suppression_bounces.txt")
+        EC_CAT_BOUNCES=$(echo $?)
 
-        JQ_INVALID_EMAILS=$(/usr/bin/jq -r 'map({reason,email,created}) | (first | keys_unsorted) as $keys | map([to_entries[] | .value]) as $rows | $keys,$rows[] | @csv' "$TEMP_DIR/suppression_invalid_emails.json" > "$TEMP_DIR/suppression_invalid_emails.csv")
-        EC_JQ_INVALID_EMAILS=$(echo $?)
+        CAT_INVALID_EMAILS=$(cat "$TEMP_DIR/suppression_invalid_emails.json" | tr -s ',' '\n' |tr -d "{}[]'" | grep '"email"' | tr -d "'" | cut -d':' -f2 | uniq | tr -d '"' > "$TEMP_DIR/suppression_invalid_emails.txt")
+        EC_CAT_INVALID_EMAILS=$(echo $?)
 
-        JQ_SPAM_REPORTS=$(/usr/bin/jq -r 'map({ip,email,created}) | (first | keys_unsorted) as $keys | map([to_entries[] | .value]) as $rows | $keys,$rows[] | @csv' "$TEMP_DIR/suppression_spam_reports.json" > "$TEMP_DIR/suppression_spam_reports.csv")
-        EC_JQ_SPAM_REPORTS=$(echo $?)
+        CAT_SPAM_REPORTS=$(cat "$TEMP_DIR/suppression_spam_reports.json" | tr -s ',' '\n' |tr -d "{}[]'" | grep '"email"' | tr -d "'" | cut -d':' -f2 | uniq | tr -d '"' > "$TEMP_DIR/suppression_spam_reports.txt")
+        EC_CAT_SPAM_REPORTS=$(echo $?)
 		
 ### Pode colocar um ELSE para tratar o ERRO.  
   
@@ -51,19 +52,6 @@ download_json(){
 	fi
 }
         
-
-# Gera a lista de emails (Suppression Blocks, Bounces, Invalid, Spam), com base nos arquivos CSV (Sendgrid)    
-ajuste_arquivos_csv(){
-
-        echo "$DATA - gerando a lista de emails (Suppression Blocks, Bounces, Invalid, Spam) com base nos arquivos CSV (Sendgrid)" >> $ARQUIVO_LOG
-
-        grep -v 'status,reason,email,created' $TEMP_DIR/suppression_blocks.csv  | egrep ",[0-9]{10}" | grep @ | rev | cut -d',' -f2 | rev | tr -d '"' | sort > $TEMP_DIR/listasendgrid.txt
-        grep -v 'status,reason,email,created' $TEMP_DIR/suppression_bounces.csv | egrep ",[0-9]{10}" | grep @ | rev | cut -d',' -f2 | rev | tr -d '"' | sort >> $TEMP_DIR/listasendgrid.txt
-        grep -v 'reason,email,created' $TEMP_DIR/suppression_invalid_emails.csv | egrep ",[0-9]{10}" | grep @ | cut -d',' -f2 | tr -d '"' | sort >> $TEMP_DIR/listasendgrid.txt
-        grep -v 'ip,email,created' $TEMP_DIR/suppression_spam_reports.csv | egrep ",[0-9]{10}" | grep @ | cut -d',' -f2 | tr -d '"' | sort >> $TEMP_DIR/listasendgrid.txt
-}
-
-
 limpeza(){
 ### Limpeza teporarios Servidor
         rm -f $TEMP_DIR/*
@@ -87,8 +75,7 @@ limpeza(){
 
 main(){
         download_json
-        converte_json_csv
-        ajuste_arquivos_csv
+        converte_json_txt
         limpeza
 }
 main
