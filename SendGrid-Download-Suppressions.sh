@@ -1,6 +1,8 @@
 #!/bin/bash
 
+# Script para coletar infos do SendGrid e tratar os dados (blocs/bouces/invalid/spam). Baseado nessa lista pode ser alimentado outro ambiente para não enviar para esses e-mails.
 # Criar API com as devidas permissões.
+
 
 DATA=$(date +%d-%-m-%Y)
 ARQUIVO_LOG="/var/log/sendgrid.log"
