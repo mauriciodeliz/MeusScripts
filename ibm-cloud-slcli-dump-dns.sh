@@ -1,6 +1,7 @@
 #!/bin/sh
 
 ### https://softlayer-python.readthedocs.io/en/latest/cli/dns/#dns-zone-print
+### Script para fazer DUMP com FOR de zonas de DNS na IBMCLOUD via CLI.
 ### Importante ter a API criada na IBM Cloud e o setup do CLI, conforme acima. Após configurado a credencial fica no .conf
 ### Estou considerando apenas o script básico, exportação da Zona e comparação
 ### Faz o "FOR" no caso de várias zonas
