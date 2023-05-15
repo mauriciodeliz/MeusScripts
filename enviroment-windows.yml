@@ -1,3 +1,5 @@
+#YML simples para setar variável em ambiente Windows
+
 - name: Update Registry
   hosts: all
   gather_facts: false
