@@ -1,5 +1,6 @@
 rem Avalia se tem a instalação 32 Bits
 rem Definir diretório compartilhado para copia dos arquivos e setup.
+rem Instalação NSClient de forma automatizada
 
 @echo off
 SET DIR_INSTALACAO_x64="C:\Program Files\NSClient++\"
